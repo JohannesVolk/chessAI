@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "chessAI"
+version = "0.1.0"
+description = "A Chess engine"
+authors = ["Johannes Volk <ge97zuz@mytum.de>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+chess = "^1.9.2"
+torch = "^1.12.0"
+pytorch-lightning = "^1.7.0"
+tensorboard = "^2.9.1"
+matplotlib = "^3.5.2"
+tqdm = "^4.64.0"
+mypy = "^0.971"
+prospector = "^1.7.7"
+black = "^22.6.0"
+ipywidgets = "^7.7.1"
+ipykernel = "^6.15.1"
+seaborn = "^0.11.2"
+torch-tb-profiler = "^0.4.0"
+line-profiler = "^3.5.1"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+ipykernel = "^6.15.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
