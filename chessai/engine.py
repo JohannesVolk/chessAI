@@ -24,7 +24,7 @@ class MyEngine:
         self.next_move = chess.Move.null()
 
     def init_tablebase(self):
-        self.tablebase = chess.syzygy.open_tablebase("./data/syzygy")
+        self.tablebase = chess.syzygy.open_tablebase("./data/syzygy/3-4-5")
 
     def evaluate(self, board: chess.Board, depth: int) -> float:
         if board.is_checkmate():
@@ -59,7 +59,7 @@ class MyEngine:
     def negamax(self, board: chess.Board, depth: int, root=False):
 
         if depth == 0:
-            return self.evaluate_boards(board).item()
+            return self.evaluate_board(board).item()
 
         best_val = -inf
 
@@ -77,11 +77,6 @@ class MyEngine:
 
         return best_val
 
-    # def evaluate_boards(self, boards : Iterable[chess.Board]) -> torch.Tensor:
-    def evaluate_boards(self, board: chess.Board) -> torch.Tensor:
-
-        # boards = map(encode_board, boards)
-        # encoded_boards = torch.stack(list(boards))
-        # return self.model.forward(encoded_boards)
-
+    def evaluate_board(self, board: chess.Board) -> torch.Tensor:
+        # one could do some batch processing here but keep it simple for now
         return self.model.forward(encode_board(board)[None, :])

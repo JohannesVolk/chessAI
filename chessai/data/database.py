@@ -82,14 +82,14 @@ def encode_board(board: chess.Board):
     return bytearray(coord_gen())
 
 
-def games_generator(path, max_games) -> Iterator[chess.pgn.Game]:
+def games_generator(path, num_games) -> Iterator[chess.pgn.Game]:
     pgn = open(path)
     i = 0
     while True:
         if (game := chess.pgn.read_game(pgn)) is not None:
             yield game
             i += 1
-            if i == max_games:
+            if i == num_games:
                 return
         else:
             return
@@ -115,14 +115,14 @@ class Database:
             "SELECT * FROM positions LIMIT 1 OFFSET (?)", (index,)
         ).fetchall()
 
-    def store_positions_from_pgn_file(self, path, max_games):
+    def store_positions_from_pgn_file(self, path, num_games):
 
         game_count_approx = (
             Path(path).stat().st_size // Path("./data/pgn/reference.pgn").stat().st_size
         )
 
         print(f"approximately {game_count_approx} games in pgn at {path}")
-        games = tqdm(games_generator(path, max_games), total=max_games)
+        games = tqdm(games_generator(path, num_games), total=num_games)
 
         # only add games that haven't been stored yet
 
