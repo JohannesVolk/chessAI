@@ -7,7 +7,7 @@ This scale related to the so called "centi-pawns" scale. With this, we not only 
 
 
 I used [python-chess](https://python-chess.readthedocs.io/en/latest/) as a chess framework in order to fully concentrate this project on the decision making that goes into selecting the right rule-conforming move.
-If you want to build your own chess-related project in python I recommend to check it out as it is easy to use and well documented.
+If you want to build your own chess-related project in python, I recommend to check it out as it is easy to use and well documented.
 
 
 # Approach
@@ -35,24 +35,37 @@ Luckily there are many websites providing such datasets. I want to reference the
 Not every position is annotated in their database but still about 10% is, which is plenty enough.
 
 If you are not familiar with the [PGN format](https://en.wikipedia.org/wiki/Portable_Game_Notation) take a look now.
-You will notice that a Deep Learning model won't be able to use this data without any preprocessing (or maybe some NLP magic that would be overengineered).
+You will notice that a Deep Learning model won't be able to use this data without any preprocessing (or maybe some NLP that would be overengineered).
 
 Therefore I had to extract the individual games/positions from the PGN and transform it into a usable format.
 
-See below for a visualisation of how this is done (one hot encoding the pieces on a 8 by 8 grid for each different piece type).
+See below for a visualisation of how this plays out (one hot encoding the pieces on a 8 by 8 grid for each different piece type).
 
 | source | <img src="./imgs/figs/white/pawn.svg"> | <img src="./imgs/figs/white/rook.svg"> | <img src="./imgs/figs/white/knight.svg"> | <img src="./imgs/figs/white/bishop.svg"> | <img src="./imgs/figs/white/king.svg"> | <img src="./imgs/figs/white/queen.svg"> |  <img src="./imgs/figs/black/pawn.svg"> | <img src="./imgs/figs/black/rook.svg"> | <img src="./imgs/figs/black/knight.svg"> | <img src="./imgs/figs/black/bishop.svg"> | <img src="./imgs/figs/black/king.svg"> | <img src="./imgs/figs/black/queen.svg"> |
 |--|--|--|--|--|--|--|--|--|--|--|--|--|
 | <img src="./imgs/figs/board.svg"> | <img src="./imgs/figs/white/pawn_map.svg"> | <img src="./imgs/figs/white/rook_map.svg"> | <img src="./imgs/figs/white/knight_map.svg"> | <img src="./imgs/figs/white/bishop_map.svg"> | <img src="./imgs/figs/white/king_map.svg"> | <img src="./imgs/figs/white/queen_map.svg"> | <img src="./imgs/figs/black/pawn_map.svg"> | <img src="./imgs/figs/black/rook_map.svg"> | <img src="./imgs/figs/black/knight_map.svg"> | <img src="./imgs/figs/black/bishop_map.svg"> | <img src="./imgs/figs/black/king_map.svg"> | <img src="./imgs/figs/black/queen_map.svg"> |
 
+Every position is assigned it's engine evalutation score (normalized from -1 for black is winning and 1 for white is winning).
+And every board mirrored to be seen from the perspective of the white player to ease up the regression task.
+
+This is all stored in a SQLite database in a compressed form as the data is very sparse. 
+
 
 # Dataset
 
+I use a dataset that loads the desired positions dynamically from the SQL database.
+
 # Model
 
-Below one can see the network architecture I used.
+Below one can see the network architecture I used. I tried to use a CNN or even a FCNN but the results where not as good as a network with affine layers.
+
+---------------------------
 
 # Training
+
+The whole training (and actually also the model) is simplified by using PyTorch Lightning as it provides a framework for boilerplate code for training.
+
+The training process is logged and vizualized with Tensorboard.
 
 # Results
 
