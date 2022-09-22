@@ -31,12 +31,6 @@ class ChessBoardEvalNN(pl.LightningModule):
         self.residual_2 = ResidualBlock(768)
         self.residual_3 = ResidualBlock(768)
         self.residual_4 = ResidualBlock(768)
-        # self.residual_5 = ResidualBlock(768)
-        # self.residual_6 = ResidualBlock(768)
-        # self.residual_7 = ResidualBlock(768)
-        # self.residual_8 = ResidualBlock(768)
-        # self.residual_9 = ResidualBlock(768)
-        # self.residual_10 = ResidualBlock(768)
 
         self.exhaust_score = nn.Sequential(
             nn.ReLU(),
@@ -57,12 +51,7 @@ class ChessBoardEvalNN(pl.LightningModule):
             self.residual_2,
             self.residual_3,
             self.residual_4,
-            # self.residual_5,
-            # self.residual_6,
-            # self.residual_7,
-            # self.residual_8,
-            # self.residual_9,
-            # self.residual_10,
+            
             self.exhaust_score,
         ]
 

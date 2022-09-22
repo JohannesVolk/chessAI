@@ -1,7 +1,7 @@
 import itertools
 from pathlib import Path
 import sqlite3
-from typing import Iterator, Optional, Tuple
+from typing import Iterator, Tuple
 import chess
 import chess.pgn
 import chess.engine
@@ -10,6 +10,7 @@ from tqdm import tqdm
 import hashlib
 
 def normalize(evaluation):
+    # calulated values from previous runs on the dataset
     evaluation = max(min(evaluation, 2500), -2500)
     mean_data = 26.4490
     variance_data = 647.956

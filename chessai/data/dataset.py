@@ -68,13 +68,14 @@ class ChessPositionsDataset(Dataset):
         
         winning = torch.tensor(list(winning), dtype=torch.float32)
     
-        print(torch.mean(winning))
-        print(torch.var(winning))
+        # if the dataset is use for the first time one has to record mean and variance to normalize the data in the database
+        # print(torch.mean(winning))
+        # print(torch.var(winning))
     
         # winning =  (winning - torch.mean(winning)) / torch.var(winning)**(0.5)
         
-        print(torch.max(winning))
-        print(torch.min(winning))
+        # print(torch.max(winning))
+        # print(torch.min(winning))
         
         # winning = (torch.max(winning) - winning) / (torch.max(winning) - torch.min(winning))
         
