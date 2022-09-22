@@ -17,7 +17,7 @@ def encode_board(board: chess.Board):
 
     for field, piece in board.piece_map().items():
         encoding[
-            (piece.piece_type - 1) * (int(piece.color) + 1), field // 8, field % 8
+            (piece.piece_type - 1) + (int(piece.color) * 6), field // 8, field % 8
         ] = 1
 
     return encoding
