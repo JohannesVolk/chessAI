@@ -11,7 +11,6 @@ chessai/data/pgn/*.pgn
 chessai/data/polyglot
 chessai/data/stockfish
 chessai/data/syzygy
-chessai/models
 
 # C extensions
 *.so

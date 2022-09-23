@@ -1,23 +1,22 @@
 # ChessAI
 
-In this project I tried to create a Deep Learning based AI that learns to play the game of chess by regressing the stockfish evaluation score of chess positions and using this score to make informed decisions in a MinMax search for the game tree. For this I trained a DNN with residual connections on 1 million chess games that were played online on lichess and annotated by the stockfish engine.
+In this project, I tried to create a Deep Learning-based AI that learns to play the game of chess by regressing [Stockfish](https://stockfishchess.org/) evaluation results on chess positions and using these results to make informed decisions in a MinMax search for the game tree. To this end, I trained a DNN with residual connections on about 10 million chess positions played online on lichess and annotated by the [Stockfish engine](https://stockfishchess.org/).
 
-The engine places the different positions on a zero centered scale that indicates the tendency of the positional advantage a player has. 
-This scale related to the so called "centi-pawns" scale. With this, we not only consider a bare advantage in terms of piece count but also advantage in terms position.
+The engine ranks the different positions on a zero-centered scale that indicates the tendency of a player's advantage. 
+This scale refers to the so-called "centi-pawns" scale. Thus, we consider not only the mere advantage in terms of number of pieces, but also the advantage in terms of position.
 
-
-I used [python-chess](https://python-chess.readthedocs.io/en/latest/) as a chess framework in order to fully concentrate this project on the decision making that goes into selecting the right rule-conforming move.
-If you want to build your own chess-related project in python, I recommend to check it out as it is easy to use and well documented.
+I have used [python-chess](https://python-chess.readthedocs.io/en/latest/) as a chess framework to focus entirely on the decision making of choosing the right move according to the rules of chess.
+If you want to create your own chess-related project in Python, I recommend you to try it, as it is easy to use and well documented.
 
 
 # Approach
 
-To play the game of chess one only needs to be able to understand what the rules are and what a good position is.
-From this we can define a engine that optimizes the position by playing move that give your player an advantage while following the rules.
+To play chess, you just need to understand the rules and know what a good position is.
+From this, we can define an engine that optimizes the position by playing moves that give the player an advantage while following the rules.
 
-As indicated above we don't need to care about the rules to much as python-chess takes care of move generation and other concepts like mate, stale-mate, etc.
+As indicated above, we don't need to worry too much about the rules, since python-chess handles move generation and other concepts such as mate, stalemate, etc.
 
-Therefore we only need to be able to identify what a good position is and how we can leverage the current position to translate the state of the board to a state in which we are more likely to win.
+Therefore, we only need to be able to recognize what a good position is and how to be able to use the current position to change the state of the board to one where we have a greater chance of winning.
 
 For this we need to follow 5 steps:
 
@@ -28,46 +27,46 @@ For this we need to follow 5 steps:
 - evaluate results and play some games of chess
 
 
-To further increase strength I use opening- and a 5-piece endgame tables to ensure high-level or even optimal play there.
+To further increase strength I use opening- and a 5-piece endgame tables to ensure a high-level or even optimal play there.
 
 # Data
 
-The most commonly used data format to represent chess games is the [Portable Game Notation (PGN)](https://en.wikipedia.org/wiki/Portable_Game_Notation). Idealy we collect .pgn data with engine annotated position evaluations as this requires substantial comutational effort to do on our own.
+The most commonly used data format for representing chess games is [Portable Game Notation (PGN)] (https://en.wikipedia.org/wiki/Portable_Game_Notation). Ideally, we collect .pgn data with annotated engine position ratings, since this would otherwise require a considerable amount of computation on our part.
 
-Luckily there are many websites providing such datasets. I want to reference the [data provided by LiChess](https://database.lichess.org/) as this is what I used to train in this project. They host over 1 TB or 3.5 billion chess games for free to use. 
-Not every position is annotated in their database but still about 10% is, which is plenty.
+Fortunately, there are many websites that provide such datasets. I would like to refer to the [data provided by LiChess](https://database.lichess.org/), as I used them for training in this project. They host over 1 TB or 3.5 billion chess games that can be used for free. 
+Not every position is annotated in their database, but still about 10%, which is a lot.
 
-If you are not familiar with the [PGN format](https://en.wikipedia.org/wiki/Portable_Game_Notation) take a look now.
-You will notice that a Deep Learning model won't be able to use this data without any preprocessing (or maybe some NLP that would be overengineered).
+If you are not familiar with the [PGN format] (https://en.wikipedia.org/wiki/Portable_Game_Notation), take a look now.
+You will notice that a deep learning model cannot use this data without preprocessing (or perhaps some NLP that would be over-engineered).
 
-Therefore I had to extract the individual games/positions from the PGN and transform it into a usable format.
+So I had to extract the individual games/positions from the PGN and convert them into a usable format.
 
-See below for a visualisation of how this plays out (one hot encoding the pieces on a 8 by 8 grid for each different piece type).
+Below is a visualization of this process (a one hot encoding of the pieces on an 8 x 8 grid for each different type of piece).
 
 | source | <img src="./imgs/figs/white/pawn.svg"> | <img src="./imgs/figs/white/rook.svg"> | <img src="./imgs/figs/white/knight.svg"> | <img src="./imgs/figs/white/bishop.svg"> | <img src="./imgs/figs/white/king.svg"> | <img src="./imgs/figs/white/queen.svg"> |  <img src="./imgs/figs/black/pawn.svg"> | <img src="./imgs/figs/black/rook.svg"> | <img src="./imgs/figs/black/knight.svg"> | <img src="./imgs/figs/black/bishop.svg"> | <img src="./imgs/figs/black/king.svg"> | <img src="./imgs/figs/black/queen.svg"> |
 |--|--|--|--|--|--|--|--|--|--|--|--|--|
 | <img src="./imgs/figs/board.svg"> | <img src="./imgs/figs/white/pawn_map.svg"> | <img src="./imgs/figs/white/rook_map.svg"> | <img src="./imgs/figs/white/knight_map.svg"> | <img src="./imgs/figs/white/bishop_map.svg"> | <img src="./imgs/figs/white/king_map.svg"> | <img src="./imgs/figs/white/queen_map.svg"> | <img src="./imgs/figs/black/pawn_map.svg"> | <img src="./imgs/figs/black/rook_map.svg"> | <img src="./imgs/figs/black/knight_map.svg"> | <img src="./imgs/figs/black/bishop_map.svg"> | <img src="./imgs/figs/black/king_map.svg"> | <img src="./imgs/figs/black/queen_map.svg"> |
 
-Every position is assigned it's engine evalutation score (normalized from 0 for black is winning and 1 for white is winning).
-And every board mirrored to be seen from the perspective of the white player to ease up the regression task.
+Each position is assigned an engine evaluation value (normalized from 0 for black wins and 1 for white wins).
+And each board is mirrored to be viewed from the white player's perspective to facilitate the regression task.
 
-This is all stored in a SQLite database in a compressed form as the data is very sparse. 
+This is then all stored in a SQLite database in compressed form, as the data is very sparse. 
 
 
 # Dataset
 
-I use a dataset that loads the desired positions dynamically from the SQL database.
+I use a dataset that dynamically loads the desired elements from the SQL database.
 
 # Model
 
-I used 4 residual blocks with 2 internal fully conected layers of size 768 which is then reduced to 1 neuron which is later transformed to a logit with sigmoid. I use Batch Normalization to stabilize training. The activation functions are all ReLU's.  
-I tried to use a CNN or even a FCNN but the results where not as good as a network with affine layers.
+I used 4 residual blocks with 2 internal fully connected layers of size 768, which are then reduced to 1 neuron that is later transformed to a logit with sigmoid. I use batch normalization to stabilize the training. The activation functions are all ReLUs.  
+I tried using a CNN or even an FCNN, but the results were not as good as using a network with affine layers.
 
 # Training
 
-The whole training (and actually also the model) is simplified by using [PyTorch Lightning](https://www.pytorchlightning.ai/) as it provides a framework for boilerplate code for training.
+The entire training (and also the model) is simplified by using [PyTorch Lightning] (https://www.pytorchlightning.ai/), which provides a framework for boilerplate code for training.
 
-The training process is logged and vizualized with [Tensorboard](https://www.tensorflow.org/tensorboard).
+The training process is logged and visualized using [Tensorboard] (https://www.tensorflow.org/tensorboard).
 
 # Results
 
@@ -80,45 +79,53 @@ The following shows the validation loss.
 <img src="./imgs/val_loss_score.svg">
 
 
-One can see that the engine learns and improves its play by looking at different positions.
-In the end the validation loss is about 0.065 which means the evalutation are only off by 6,5% on average.
-As both losses are still decreasing further training could further increase the models performance.
+You can see that the engine learns and improves its game by looking at different positions.
+In the end, the validation loss is 0.065, which means that the evaluation is only off by 6.5% on average.
+Since both losses are still decreasing, further training could further improve the performance of the model.
 
-Allthough the model learns to predict the evaluation score of the board somewhat correctly, it could improve by a lot if the data used to train was more randomly selected.
+Although the model learns to predict the board evaluation reasonably correctly, it could improve by quite a bit if the data used for training were selected more randomly.
 
-The positions might not have been the most challangeing as
-it operates on full games that are not played at a very high ELO ranking and therefore the positions are not i.i.d and
-most predictions are either heavily leaning to a black or white advantage or its almost perfectly balanced.
-Therefore the small tendencies that are needed aren't really identified.
+The positions were perhaps not the most challenging, as
+they are complete games, not played at a very high ELO rank, and therefore the positions are not i.i.d. and
+most of the predictions either strongly tend to a black or white advantage or are almost perfectly balanced.
+Therefore, the small tendencies that are needed are not really recognized.
 
-SOTA results like Deepminds AlphaZero obviously rely on substantial ressources which one can't easily access and have way more complex architectures, training processes, etc..
 
-But still it was possible to create a simple DNN that learns how to play the game of chess on a entry level.
+SOTA results like Deepmind's AlphaZero obviously rely on considerable resources that cannot be accessed easily, and have far more complex architectures, training processes, and so on.
+
+Nevertheless, it was possible to create a simple DNN that learns how to play chess at an entry level.
 
 
 ## Observations
 
-The engine learned basic principles in chess that beginners a thaught like:
+The engine learned basic principles of chess, which should be familiar to beginners:
 
-- rooks should be connected
-- knights shouldn't be on the borders of the board
-- center control is important
-- keep pieces protected
-- pushing pawns makes sense
-- keep the king save
-- don't loose material
+- Rooks should be connected
+- Knights should not be on the edge of the board
+- Control over the center is important
+- Keep pieces protected
+- move pawns forward to transform them into a superior piece
+- keep the king safe
+- do not lose material
 
-For sure it doesn't always play according to these rules and still makes major mistakes but still: by observing some games it played against itself, a notion of these principles can be interpreted into the engine's decision-making / moves it makes
+Sure, for sure the AI doesn't always play by these rules and still makes big mistakes, but still: by observing some games it played against herself, some notion of these principles can be interpreted into the decision making/moves of the engine
+
 
 ## Further impressions
 
-Below one can see some games the engine played plotted with their positions evaluations.
-One can notice that my engine has some positions that are evaluated very wrong and therefore results in poor play.
-Note stockfish always played white (and won these games as the score goes to 1)
+Below you can see some games that the engine played, drawn with their position ratings.
+You can see that my engine rated some positions very wrong and therefore played badly.
 
-|||
+
+| my engine vs. my engine| Stockfish vs. my engine |
 |--|--|
 | <img src="./imgs/game0.png"> | <img src="./imgs/game1.png"> |
+
+
+As you can see, the game that the machine played against itself is not evaluated quite differently from the game against stockfish.
+This makes perfect sense, since both players agree on what is good on the left, while there are serious disagreements on the right.
+
+
 
 # Getting started
 

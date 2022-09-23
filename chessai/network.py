@@ -119,6 +119,6 @@ class ChessBoardEvalNN(pl.LightningModule):
 
     def load_model(hparams):
         model = ChessBoardEvalNN(hparams=hparams)
-        model.load_state_dict(torch.load("./models/model1.model"))
+        model.load_state_dict(torch.load("./models/model.model"))
 
         return model
