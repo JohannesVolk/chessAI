@@ -82,12 +82,12 @@ The following shows the validation loss.
 You can see that the engine learns and improves its game by looking at different positions.
 In the end, the validation loss is 0.065, which means that the evaluation is only off by 6.5% on average.
 Since both losses are still decreasing, further training could further improve the performance of the model.
+However, since the training and data pre-processing was already very resource intensive (several hours, several GB load on GPU, SSD, etc.), I decided to stop further progress as it already showed a promising learning effect.
 
-Although the model learns to predict the board evaluation reasonably correctly, it could improve by quite a bit if the data used for training were selected more randomly.
-
+It could improve by quite a bit if the data used for training were selected more randomly.
 The positions were perhaps not the most challenging, as
 they are complete games, not played at a very high ELO rank, and therefore the positions are not i.i.d. and
-most of the predictions either strongly tend to a black or white advantage or are almost perfectly balanced.
+most of the predictions either strongly tend to a black or white advantage or are almost perfectly balanced (i.e low ELO play entails major mistakes).
 Therefore, the small tendencies that are needed are not really recognized.
 
 
@@ -101,14 +101,14 @@ Nevertheless, it was possible to create a simple DNN that learns how to play che
 The engine learned basic principles of chess, which should be familiar to beginners:
 
 - Rooks should be connected
-- Knights should not be on the edge of the board
+- Knights should not be placed on the edge of the board
 - Control over the center is important
 - Keep pieces protected
 - move pawns forward to transform them into a superior piece
 - keep the king safe
 - do not lose material
 
-Sure, for sure the AI doesn't always play by these rules and still makes big mistakes, but still: by observing some games it played against herself, some notion of these principles can be interpreted into the decision making/moves of the engine
+Sure, the AI doesn't always play by these rules and still makes big mistakes, but still: by observing some games it played against herself, some notion of these principles can be interpreted into the decision making/moves of the engine
 
 
 ## Further impressions
