@@ -81,7 +81,8 @@ The following shows the validation loss.
 
 
 One can see that the engine learns and improves its play by looking at different positions.
-In the end the validation loss is abount 0.065 which means on the evalutation scale of 0 to 1 it only is off by 6%.
+In the end the validation loss is about 0.065 which means the evalutation are only off by 6,5% on average.
+As both losses are still decreasing further training could further increase the models performance.
 
 Allthough the model learns to predict the evaluation score of the board somewhat correctly, it could improve by a lot if the data used to train was more randomly selected.
 
@@ -105,10 +106,19 @@ The engine learned basic principles in chess that beginners a thaught like:
 - keep pieces protected
 - pushing pawns makes sense
 - keep the king save
-- don't make bad trades
+- don't loose material
 
 For sure it doesn't always play according to these rules and still makes major mistakes but still: by observing some games it played against itself, a notion of these principles can be interpreted into the engine's decision-making / moves it makes
 
+## Further impressions
+
+Below one can see some games the engine played plotted with their positions evaluations.
+One can notice that my engine has some positions that are evaluated very wrong and therefore results in poor play.
+Note stockfish always played white (and won these games as the score goes to 1)
+
+|||
+|--|--|
+| <img src="./imgs/game0.png"> | <img src="./imgs/game1.png"> |
 
 # Getting started
 
