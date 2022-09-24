@@ -123,8 +123,7 @@ You can see that my engine rated some positions very wrong and therefore played 
 
 
 As you can see, the game that the machine played against itself is not evaluated quite differently from the game against stockfish.
-This makes perfect sense, since both players agree on what is good on the left, while there are serious disagreements on the right.
-
+That is interesting as the game on the left seems to be very simple and not very complicated to analyse, while the right game seems to contain more advanced tactics my engine wasn't able to evaluate correctly. This maks perfect sense as stockfish is a lot stronger agent then my engine. 
 
 
 # Getting started
